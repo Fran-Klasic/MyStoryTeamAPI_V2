@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MyStoryTeamAPI.Db;
 using MyStoryTeamAPI.Models.App;
+using MyStoryTeamAPI.Models.Canvas;
 using MyStoryTeamAPI.Repository;
 using Newtonsoft.Json;
 using System.Text;
@@ -59,6 +60,7 @@ builder.Services
     {
         options.SerializerSettings.ReferenceLoopHandling =
             ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.Converters.Add(new CanvasElementConverter());
     });
 
 
@@ -67,6 +69,7 @@ builder.Services
 builder.Services.AddSingleton(jwtConfig);
 
 builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<CanvasRepository>();
 
 #endregion
 
