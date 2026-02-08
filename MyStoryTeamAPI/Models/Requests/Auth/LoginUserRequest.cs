@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyStoryTeamAPI.Models.Auth
+namespace MyStoryTeamAPI.Models.Requests.Auth
 {
     public class LoginUserRequest
     {

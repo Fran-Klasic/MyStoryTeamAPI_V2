@@ -1,8 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using MyStoryTeamAPI.Db;
 using MyStoryTeamAPI.Models.App;
-using MyStoryTeamAPI.Models.Auth;
 using MyStoryTeamAPI.Models.Db;
+using MyStoryTeamAPI.Models.Requests.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -146,6 +146,11 @@ namespace MyStoryTeamAPI.Repository
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string GetUsername()
+        {
+            DbUser user = this.GetCurrentUser();
+            return user.Username ?? "Unknown";
         }
     }
 }

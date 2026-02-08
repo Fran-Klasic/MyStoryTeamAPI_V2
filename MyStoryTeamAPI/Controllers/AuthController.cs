@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyStoryTeamAPI.Models.Auth;
 using MyStoryTeamAPI.Models.Db;
+using MyStoryTeamAPI.Models.Requests.Auth;
 using MyStoryTeamAPI.Repository;
 
 namespace MyStoryTeamAPI.Controllers
@@ -46,6 +46,14 @@ namespace MyStoryTeamAPI.Controllers
         public ActionResult TestUser()
         {
             return this.Ok();
+        }
+
+        [Authorize]
+        [HttpGet("user")]
+        public ActionResult<string> GetCurrentUser()
+        {
+            string username = _authRepository.GetUsername() ?? "Username";
+            return this.Ok(username);
         }
     }
 }
