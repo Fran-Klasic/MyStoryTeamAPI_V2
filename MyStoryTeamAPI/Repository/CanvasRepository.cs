@@ -47,13 +47,13 @@ namespace MyStoryTeamAPI.Repository
         {
             DbUser currentUser = this.GetCurrentUser();
             DbCanvas? canvas = this.GetCanvasById(updateCanvasRequest.ID_Canvas);
-            if(canvas == null)
+            if (canvas == null)
             {
                 return null;
             }
             if (currentUser.ID_User != canvas.ID_User)
             {
-                throw new UnauthorizedAccessException("User does not have permission to update this canvas.");
+                return null;
             }
 
             canvas.Canvas_Name = updateCanvasRequest.Canvas_Name ?? canvas.Canvas_Name;
@@ -78,13 +78,13 @@ namespace MyStoryTeamAPI.Repository
         {
             DbUser currentUser = this.GetCurrentUser();
             DbCanvas? canvas = this.GetCanvasById(id);
-            if(canvas == null)
+            if (canvas == null)
             {
                 return null;
             }
             if (currentUser.ID_User != canvas.ID_User)
             {
-                throw new UnauthorizedAccessException("User does not have permission to delete this canvas.");
+                return null;
             }
             this.DbContext.Canvases.Remove(canvas);
             this.DbContext.SaveChanges();
@@ -101,7 +101,7 @@ namespace MyStoryTeamAPI.Repository
             }
             if (currentUser.ID_User != canvas.ID_User && canvas.Visibility == false)
             {
-                throw new UnauthorizedAccessException("User does not have permission to view this canvas.");
+                return null;
             }
             return new CanvasDetailsResponse(canvas);
         }
