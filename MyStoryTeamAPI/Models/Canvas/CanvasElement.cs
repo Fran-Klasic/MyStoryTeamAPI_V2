@@ -10,7 +10,7 @@ namespace MyStoryTeamAPI.Models.Canvas
         public Guid Id { get; set; }
         public Datas.Vector3Int Position { get; set; } = default!;
         public Datas.Vector2Int Size { get; set; } = default!;
-        public List<Connection> Connections { get; set; } = new();
+        public List<Datas.ConnectionDB> Connections { get; set; } = new();
     }
 
     public sealed class CanvasElementConverter : JsonConverter

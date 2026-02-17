@@ -1,4 +1,5 @@
-﻿using MyStoryTeamAPI.Db;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using MyStoryTeamAPI.Db;
 using MyStoryTeamAPI.Models.Canvas;
 using MyStoryTeamAPI.Models.Db;
 using MyStoryTeamAPI.Models.Responses;
@@ -32,20 +33,24 @@ namespace MyStoryTeamAPI.Repository
             return canvas.ID_Canvas;
         }
 
-        private DbCanvas GetCanvasById(int? id)
+        private DbCanvas? GetCanvasById(int? id)
         {
             DbCanvas? canvas = this.DbContext.Canvases.Where(c => c.ID_Canvas == id).FirstOrDefault();
             if (canvas == null)
             {
-                throw new ArgumentException("Canvas with given id does not exist.");
+                return null;
             }
             return canvas;
         }
 
-        public int UpdateCanvas(Models.Requests.UpdateCanvasRequest updateCanvasRequest)
+        public int? UpdateCanvas(Models.Requests.UpdateCanvasRequest updateCanvasRequest)
         {
             DbUser currentUser = this.GetCurrentUser();
-            DbCanvas canvas = this.GetCanvasById(updateCanvasRequest.ID_Canvas);
+            DbCanvas? canvas = this.GetCanvasById(updateCanvasRequest.ID_Canvas);
+            if(canvas == null)
+            {
+                return null;
+            }
             if (currentUser.ID_User != canvas.ID_User)
             {
                 throw new UnauthorizedAccessException("User does not have permission to update this canvas.");
@@ -69,10 +74,14 @@ namespace MyStoryTeamAPI.Repository
             return canvas.ID_Canvas;
         }
 
-        public int DeleteCanvas(int? id)
+        public int? DeleteCanvas(int? id)
         {
             DbUser currentUser = this.GetCurrentUser();
-            DbCanvas canvas = this.GetCanvasById(id);
+            DbCanvas? canvas = this.GetCanvasById(id);
+            if(canvas == null)
+            {
+                return null;
+            }
             if (currentUser.ID_User != canvas.ID_User)
             {
                 throw new UnauthorizedAccessException("User does not have permission to delete this canvas.");
@@ -84,9 +93,12 @@ namespace MyStoryTeamAPI.Repository
 
         public CanvasDetailsResponse? GetCanvasDetails(int id)
         {
-            DbCanvas canvas = this.GetCanvasById(id);
+            DbCanvas? canvas = this.GetCanvasById(id);
             DbUser currentUser = this.GetCurrentUser();
-
+            if (canvas == null)
+            {
+                return null;
+            }
             if (currentUser.ID_User != canvas.ID_User && canvas.Visibility == false)
             {
                 throw new UnauthorizedAccessException("User does not have permission to view this canvas.");
@@ -100,6 +112,16 @@ namespace MyStoryTeamAPI.Repository
             DbUser currentUser = this.GetCurrentUser();
             var response = this.DbContext.Canvases
                 .Where(c => c.ID_User == currentUser.ID_User)
+                .Select(c => new CanvasesDetailsResponse(c))
+                .ToList();
+            return response;
+        }
+
+        public List<CanvasesDetailsResponse> GetAllPublicCanvases()
+        {
+            //Get all canvases that are public and return them as a list of CanvasesDetailsResponse
+            var response = this.DbContext.Canvases
+                .Where(c => c.Visibility == true)
                 .Select(c => new CanvasesDetailsResponse(c))
                 .ToList();
             return response;

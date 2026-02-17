@@ -5,7 +5,7 @@
         public record Vector2Int(int X, int Y);
         public record Vector3Int(int X, int Y, int Z);
 
-        public record Connection(Guid Self, Guid Target);
+        public record ConnectionDB(string Self, string Target);
 
         public record ListData_(List<string> ListData);
         public record VideoData(string Url);

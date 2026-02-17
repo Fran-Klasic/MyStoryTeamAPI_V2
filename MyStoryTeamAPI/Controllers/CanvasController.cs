@@ -32,7 +32,11 @@ namespace MyStoryTeamAPI.Controllers
         public ActionResult<CanvasDetailsResponse> GetCanvas(int id)
         {
             //Returns canvas data and canvas name
-            CanvasDetailsResponse canvasDetailsResponse = _canvasRepository.GetCanvasDetails(id);
+            CanvasDetailsResponse? canvasDetailsResponse = _canvasRepository.GetCanvasDetails(id);
+            if (canvasDetailsResponse == null)
+            {
+                return NotFound("Canvas Not Found");
+            }
             return canvasDetailsResponse;
         }
 
@@ -50,7 +54,11 @@ namespace MyStoryTeamAPI.Controllers
         public ActionResult<int> UpdateCanvas(UpdateCanvasRequest updateCanvasRequest)
         {
             //Updates canvas data, name and background image
-            int id = _canvasRepository.UpdateCanvas(updateCanvasRequest);
+            int? id = _canvasRepository.UpdateCanvas(updateCanvasRequest);
+            if(id == null)
+            {
+                return NotFound("Canvas Not Found");
+            }
             return this.Ok(id);
         }
 
@@ -59,8 +67,21 @@ namespace MyStoryTeamAPI.Controllers
         public ActionResult<int> DeleteCanvas(DeleteCanvasRequest deleteCanvasRequest)
         {
             //Deletes canvas
-            int id = _canvasRepository.DeleteCanvas(deleteCanvasRequest.ID_Canvas);
+            int? id = _canvasRepository.DeleteCanvas(deleteCanvasRequest.ID_Canvas);
+            if (id == null)
+            {
+                return NotFound("Canvas Not Found");
+            }
             return this.Ok(id);
+        }
+
+        [HttpGet("public")]
+        [Authorize]
+        public ActionResult<List<CanvasesDetailsResponse>> GetAllPublicCanvases()
+        {
+            //Returns list of canvases with canvas names and background images and id, but without canvas data
+            List<CanvasesDetailsResponse> canvases = _canvasRepository.GetAllPublicCanvases();
+            return canvases;
         }
     }
 }

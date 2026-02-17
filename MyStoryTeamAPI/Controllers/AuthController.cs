@@ -38,7 +38,23 @@ namespace MyStoryTeamAPI.Controllers
         public ActionResult RegisterUser(RegisterUserRequest request)
         {
             this._authRepository.RegisterUser(request);
-            return this.Ok();
+
+            var userData = new LoginUserRequest()
+            {
+                Email = request.Email,
+                Password = request.Password
+            };
+
+            try
+            {
+                DbUser user = this._authRepository.LoginUser(userData);
+                string accessToken = this._authRepository.GenerateJwtToken(user);
+                return this.Ok(accessToken);
+            }
+            catch (Exception)
+            {
+                return this.Unauthorized();
+            }
         }
 
         [Authorize]
