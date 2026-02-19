@@ -32,6 +32,5 @@ namespace MyStoryTeamAPI.Models.Db
 
         // Navigation
         public DbUser? User { get; set; }
-        public ICollection<DbVisitedCanvas>? Visits { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace MyStoryTeamAPI.Models.Responses
     {
         public int ID_Canvas { get; }
         public int ID_User { get; }
+        public string Username { get; set; }
         public string Canvas_Name { get; }
         public string Canvas_Data { get; }
         public DateTime Created_At { get; }
@@ -33,6 +34,7 @@ namespace MyStoryTeamAPI.Models.Responses
             Favorite = dbCanvas.Favorite;
             Background_Image = dbCanvas.Background_Image;
             Background_Color = dbCanvas.Background_Color;
+            Username = dbCanvas.User?.Username ?? "User";
 
             try
             {

@@ -18,7 +18,6 @@ namespace MyStoryTeamAPI.Db
         public DbSet<DbConversationParticipant> ConversationParticipants { get; set; }
         public DbSet<DbMessage> Messages { get; set; }
         public DbSet<DbUser> Users { get; set; }
-        public DbSet<DbVisitedCanvas> VisitedCanvases { get; set; }
 
     }
 }

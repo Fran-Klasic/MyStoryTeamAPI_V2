@@ -103,7 +103,13 @@ namespace MyStoryTeamAPI.Repository
             {
                 return null;
             }
-            return new CanvasDetailsResponse(canvas);
+            return new CanvasDetailsResponse(canvas)
+            {
+                Username = DbContext.Users
+                    .Where(u => u.ID_User == canvas.ID_User)
+                    .Select(u => u.Username)
+                    .FirstOrDefault() ?? "User"
+            };
         }
 
         public List<CanvasesDetailsResponse> GetAllCanvases()
@@ -112,19 +118,29 @@ namespace MyStoryTeamAPI.Repository
             DbUser currentUser = this.GetCurrentUser();
             var response = this.DbContext.Canvases
                 .Where(c => c.ID_User == currentUser.ID_User)
-                .Select(c => new CanvasesDetailsResponse(c))
+                .Select(c => new CanvasesDetailsResponse(c)
+                {
+                    Username = currentUser.Username ?? "User"
+                })
                 .ToList();
             return response;
         }
 
         public List<CanvasesDetailsResponse> GetAllPublicCanvases()
         {
-            //Get all canvases that are public and return them as a list of CanvasesDetailsResponse
-            var response = this.DbContext.Canvases
+            return DbContext.Canvases
                 .Where(c => c.Visibility == true)
-                .Select(c => new CanvasesDetailsResponse(c))
+                .Join(
+                    DbContext.Users,
+                    canvas => canvas.ID_User,
+                    user => user.ID_User,
+                    (canvas, user) => new CanvasesDetailsResponse(canvas)
+                    {
+                        Username = user.Username ?? "User"
+                    })
                 .ToList();
-            return response;
         }
+
+
     }
 }

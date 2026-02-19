@@ -70,6 +70,7 @@ builder.Services.AddSingleton(jwtConfig);
 
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<CanvasRepository>();
+builder.Services.AddScoped<ConversationsRepository>();
 
 #endregion
 
