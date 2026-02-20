@@ -10,6 +10,7 @@ namespace MyStoryTeamAPI.Models.Db
         public int ID_Conversation { get; set; }
 
         public DateTime Created_At { get; set; }
+        public string Conversation_Name { get; set; }
 
         // Navigation
         public ICollection<DbConversationParticipant>? Participants { get; set; }

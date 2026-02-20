@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyStoryTeamAPI.Models.Db;
 using MyStoryTeamAPI.Models.Requests.Auth;
@@ -15,6 +16,18 @@ namespace MyStoryTeamAPI.Controllers
         public AuthController(AuthRepository authRepository)
         {
             _authRepository = authRepository;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("username/{id}")]
+        public ActionResult<string> GetUsernameByID(int id)
+        {
+            string? result = _authRepository.GetUsernameByID(id);
+            if(result == null)
+            {
+                return NotFound();
+            }
+            return result;
         }
 
         [AllowAnonymous]
@@ -66,10 +79,10 @@ namespace MyStoryTeamAPI.Controllers
 
         [Authorize]
         [HttpGet("user")]
-        public ActionResult<string> GetCurrentUser()
+        public ActionResult<DbUser> GetCurrentUser()
         {
-            string username = _authRepository.GetUsername() ?? "Username";
-            return this.Ok(username);
+            DbUser user = _authRepository.GetCurrentUser();
+            return this.Ok(user);
         }
     }
 }

@@ -79,7 +79,8 @@ namespace MyStoryTeamAPI.Repository
                 //Create conversation
                 var conversation = new DbConversation
                 {
-                    Created_At = request.Created_At
+                    Created_At = DateTime.Now,
+                    Conversation_Name = "New Conversation"
                 };
 
                 DbContext.Conversations.Add(conversation);
@@ -91,7 +92,8 @@ namespace MyStoryTeamAPI.Repository
                     new DbConversationParticipant
                     {
                         ID_Conversation = conversation.ID_Conversation,
-                        ID_User = idUser
+                        ID_User = idUser,
+                        Joined_At = DateTime.Now
                     });
 
                 await DbContext.ConversationParticipants.AddRangeAsync(participants);
@@ -184,6 +186,47 @@ namespace MyStoryTeamAPI.Repository
 
             return participant.ID_Conversation_Participant;
         }
+        public string? GetConversationName(int conversationId)
+        {
+            var currentUser = GetCurrentUser();
 
+            bool isParticipant = DbContext.ConversationParticipants.Any(cp =>
+                cp.ID_Conversation == conversationId &&
+                cp.ID_User == currentUser.ID_User);
+
+            if (!isParticipant)
+                return null;
+
+            return DbContext.Conversations
+                .Where(c => c.ID_Conversation == conversationId)
+                .Select(c => c.Conversation_Name)
+                .FirstOrDefault();
+        }
+        public bool UpdateConversationName(int conversationId, string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+                return false;
+
+            var currentUser = GetCurrentUser();
+
+            bool isParticipant = DbContext.ConversationParticipants.Any(cp =>
+                cp.ID_Conversation == conversationId &&
+                cp.ID_User == currentUser.ID_User);
+
+            if (!isParticipant)
+                return false;
+
+            var conversation = DbContext.Conversations
+                .FirstOrDefault(c => c.ID_Conversation == conversationId);
+
+            if (conversation == null)
+                return false;
+
+            conversation.Conversation_Name = newName.Trim();
+
+            DbContext.SaveChanges();
+
+            return true;
+        }
     }
 }

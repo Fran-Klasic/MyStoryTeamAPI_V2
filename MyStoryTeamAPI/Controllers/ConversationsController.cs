@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MyStoryTeamAPI.Models.Requests;
 using MyStoryTeamAPI.Models.Responses;
@@ -59,7 +60,7 @@ namespace MyStoryTeamAPI.Controllers
         public async Task<ActionResult<int>> CreateConversations(
             CreateConversationRequest createConversationRequest)
         {
-            int? result = 
+            int? result =
                 await _conversationsRepository.CreateConversationsAsync(createConversationRequest);
 
             if (result == null)
@@ -80,5 +81,34 @@ namespace MyStoryTeamAPI.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("{id}/name")]
+        [Authorize]
+        public ActionResult<string> GetConversationName(int id)
+        {
+            string? result = _conversationsRepository.GetConversationName(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+        [HttpPut("{id}/name")]
+        [Authorize]
+        public ActionResult UpdateConversationName(int id,
+           [FromBody] UpdateConversationNameRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Conversation_Name))
+                return BadRequest("Conversation name is required.");
+
+            bool success = _conversationsRepository
+                .UpdateConversationName(id, request.Conversation_Name);
+
+            if (!success)
+                return NotFound();
+
+            return Ok();
+        }
+
     }
 }

@@ -7,6 +7,5 @@ namespace MyStoryTeamAPI.Models.Requests
         [Required]
         public List<int>? ID_Users { get; set; }
 
-        public DateTime Created_At { get; set; } = DateTime.Now;
     }
 }

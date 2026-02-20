@@ -147,10 +147,13 @@ namespace MyStoryTeamAPI.Repository
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public string GetUsername()
+        public string? GetUsernameByID(int id)
         {
-            DbUser user = this.GetCurrentUser();
-            return user.Username ?? "Unknown";
+            return DbContext.Users
+                 .Where(u => u.ID_User == id)
+                 .Select(u => u.Username)
+                 .FirstOrDefault();
         }
+
     }
 }
