@@ -45,12 +45,25 @@ if (builder.Environment.IsDevelopment())
         });
     });
 }
+else
+{
+    builder.Services.AddCors(config =>
+    {
+        config.AddDefaultPolicy(policy =>
+        {
+            policy
+                .WithOrigins("https://fran-klasic.github.io")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+}
 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("Database")
+        Environment.GetEnvironmentVariable("DATABASE_CONNECTION") ?? builder.Configuration.GetConnectionString("Database")
     )
 );
 
@@ -70,7 +83,7 @@ builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
-    return new OpenAI.OpenAIClient(config["OpenAI:ApiKey"]);
+    return new OpenAI.OpenAIClient(Environment.GetEnvironmentVariable("OPENAI_KEY") ?? config["OpenAI:ApiKey"]);
 });
 
 builder.Services.AddScoped<AuthRepository>();
