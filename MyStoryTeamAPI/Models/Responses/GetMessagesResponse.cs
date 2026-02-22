@@ -2,7 +2,7 @@
 
 namespace MyStoryTeamAPI.Models.Responses
 {
-    public class GetAllMessagesResponse
+    public class GetMessagesResponse
     {
         [Required]
         public int? ID_Message { get; set; }

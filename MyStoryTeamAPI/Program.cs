@@ -67,10 +67,16 @@ builder.Services
 #region REPOSITORIES
 
 builder.Services.AddSingleton(jwtConfig);
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    return new OpenAI.OpenAIClient(config["OpenAI:ApiKey"]);
+});
 
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<CanvasRepository>();
 builder.Services.AddScoped<ConversationsRepository>();
+builder.Services.AddScoped<AiConversationsRepository>();
 
 #endregion
 

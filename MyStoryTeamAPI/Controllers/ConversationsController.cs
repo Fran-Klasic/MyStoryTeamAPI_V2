@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MyStoryTeamAPI.Models.Requests;
 using MyStoryTeamAPI.Models.Responses;
@@ -33,9 +32,9 @@ namespace MyStoryTeamAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public ActionResult<List<GetAllMessagesResponse>> GetAllMessages(int id)
+        public ActionResult<List<GetMessagesResponse>> GetAllMessages(int id)
         {
-            List<GetAllMessagesResponse>? result = _conversationsRepository.GetAllMessages(id);
+            List<GetMessagesResponse>? result = _conversationsRepository.GetAllMessages(id);
             if (result == null)
             {
                 return NotFound();

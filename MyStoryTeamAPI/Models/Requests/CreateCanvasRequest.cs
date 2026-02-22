@@ -10,6 +10,6 @@ namespace MyStoryTeamAPI.Models.Requests
         public string? Background_Image { get; set; }
         public string? Background_Color { get; set; }
 
-        public DateTime Created_At { get; set; } = DateTime.Now;
+        public DateTime Created_At { get; set; } = DateTime.UtcNow;
     }
 }

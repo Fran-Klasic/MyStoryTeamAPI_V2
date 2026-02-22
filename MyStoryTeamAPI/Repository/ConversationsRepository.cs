@@ -28,7 +28,7 @@ namespace MyStoryTeamAPI.Repository
                 .OrderByDescending(c => c.Created_At)
                 .ToList();
         }
-        public List<GetAllMessagesResponse>? GetAllMessages(int conversationId)
+        public List<GetMessagesResponse>? GetAllMessages(int conversationId)
         {
             var currentUser = GetCurrentUser();
 
@@ -42,7 +42,7 @@ namespace MyStoryTeamAPI.Repository
             return DbContext.Messages
                 .Where(m => m.ID_Conversation == conversationId)
                 .OrderBy(m => m.Created_At)
-                .Select(m => new GetAllMessagesResponse
+                .Select(m => new GetMessagesResponse
                 {
                     ID_Message = m.ID_Message,
                     ID_Conversation = m.ID_Conversation,
@@ -79,7 +79,7 @@ namespace MyStoryTeamAPI.Repository
                 //Create conversation
                 var conversation = new DbConversation
                 {
-                    Created_At = DateTime.Now,
+                    Created_At = DateTime.UtcNow,
                     Conversation_Name = "New Conversation"
                 };
 
@@ -93,7 +93,7 @@ namespace MyStoryTeamAPI.Repository
                     {
                         ID_Conversation = conversation.ID_Conversation,
                         ID_User = idUser,
-                        Joined_At = DateTime.Now
+                        Joined_At = DateTime.UtcNow
                     });
 
                 await DbContext.ConversationParticipants.AddRangeAsync(participants);

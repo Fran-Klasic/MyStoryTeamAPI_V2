@@ -80,7 +80,7 @@ namespace MyStoryTeamAPI.Repository
                 Username = request.Username,
                 Email = request.Email,
                 Password_Hash = hashBytes, //VARBINARY
-                Created_At = DateTime.Now,
+                Created_At = DateTime.UtcNow,
             };
 
             this.DbContext.Users.Add(user);
@@ -141,7 +141,7 @@ namespace MyStoryTeamAPI.Repository
                 issuer: this.jwtConfig.Issuer,
                 audience: this.jwtConfig.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(8),
+                expires: DateTime.UtcNow.AddHours(8),
                 signingCredentials: creds
             );
 

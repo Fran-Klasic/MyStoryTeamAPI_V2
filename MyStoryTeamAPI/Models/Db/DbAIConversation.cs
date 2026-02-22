@@ -14,6 +14,8 @@ namespace MyStoryTeamAPI.Models.Db
         [ForeignKey(nameof(User))]
         public int ID_User { get; set; }
 
+        public string AI_Conversation_Name { get; set; } = "New Conversation";
+
         public DateTime Created_At { get; set; }
 
         // Navigation

@@ -11,7 +11,7 @@ namespace MyStoryTeamAPI.Models.Requests
         [MaxLength(50)]
         public string? Canvas_Name { get; set; }
         public CanvasDocument? Canvas_Data { get; set; }
-        public DateTime Updated_At { get; set; } = DateTime.Now;
+        public DateTime Updated_At { get; set; } = DateTime.UtcNow;
         public bool? Visibility { get; set; }
         public bool? Favorite { get; set; }
         public string? Background_Image { get; set; }

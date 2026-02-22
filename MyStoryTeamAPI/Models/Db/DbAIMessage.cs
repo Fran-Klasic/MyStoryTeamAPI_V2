@@ -18,6 +18,9 @@ namespace MyStoryTeamAPI.Models.Db
 
         public DateTime Created_At { get; set; }
 
+        [Required]
+        public string Type { get; set; } = "request";
+
         // Navigation
         public DbAIConversation? AIConversation { get; set; }
     }

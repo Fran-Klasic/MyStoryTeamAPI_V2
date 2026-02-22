@@ -10,6 +10,6 @@ namespace MyStoryTeamAPI.Models.Requests
         [Required]
         public int? ID_Conversation { get; set; }
 
-        public DateTime Joined_At { get; set; } = DateTime.Now;
+        public DateTime Joined_At { get; set; } = DateTime.UtcNow;
     }
 }
